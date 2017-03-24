@@ -1,0 +1,10 @@
+/node_modules/
+/dist/**/*.js.map
+/src/
+/.vscode/
+
+.yarnclean
+yarn-error.log
+.npmignore
+npm-debug.log
+tsconfig.json

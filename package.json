@@ -1,0 +1,40 @@
+{
+    "name": "miter-shared-module",
+    "version": "0.1.3",
+    "description": "An Angular module containing helpful classes that facilitate working with a miter backend",
+    "main": "dist/index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "tsc",
+        "watch": "tsc -w",
+        "prepublish": "rm -rf ./dist && tsc"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+ssh://git@github.com/miter-framework/miter-shared-module.git"
+    },
+    "keywords": [
+        "angular",
+        "miter",
+        "miter-framework"
+    ],
+    "author": "Brandon Slade <brandonyoyoslade@gmail.com>",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/miter-framework/miter-shared-module/issues"
+    },
+    "homepage": "https://github.com/miter-framework/miter-shared-module#readme",
+    "dependencies": {
+        "@angular/common": "4.0.0-rc.5",
+        "@angular/core": "4.0.0-rc.5",
+        "@angular/forms": "4.0.0-rc.5",
+        "@angular/http": "4.0.0-rc.5",
+        "@angular/platform-browser": "4.0.0-rc.5",
+        "@angular/router": "4.0.0-rc.5",
+        "@types/node": "^7.0.10",
+        "@types/pluralize": "^0.0.27",
+        "pluralize": "^4.0.0",
+        "rxjs": "^5.0.1",
+        "zone.js": "^0.8.4"
+    }
+}
