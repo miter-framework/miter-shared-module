@@ -2,28 +2,23 @@
     "name": "miter-shared-module",
     "version": "0.1.3",
     "description": "An Angular module containing helpful classes that facilitate working with a miter backend",
-    "main": "dist/index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "build": "tsc",
         "watch": "tsc -w",
-        "prepublish": "rm -rf ./dist && tsc"
+        "prepublish": "rm -rf ./dist && tsc",
+        "lint": "./node_modules/.bin/tslint -c \"config/tslint.json\" --project \"tsconfig.json\" -e \"**/*.spec.ts\" -t stylish",
+        "pre-commit": "bash ./scripts/pre-commit.sh"
     },
-    "repository": {
-        "type": "git",
-        "url": "git+ssh://git@github.com/miter-framework/miter-shared-module.git"
-    },
-    "keywords": [
-        "angular",
-        "miter",
-        "miter-framework"
+    "pre-commit": [
+        "pre-commit"
     ],
-    "author": "Brandon Slade <brandonyoyoslade@gmail.com>",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/miter-framework/miter-shared-module/issues"
+    "main": "./dist/index.js",
+    "typings": "./dist/index",
+    "devDependencies": {
+        "pre-commit": "^1.2.2",
+        "tslint": "^4.5.1"
     },
-    "homepage": "https://github.com/miter-framework/miter-shared-module#readme",
     "dependencies": {
         "@angular/common": "4.0.0-rc.5",
         "@angular/core": "4.0.0-rc.5",
@@ -35,6 +30,25 @@
         "@types/pluralize": "^0.0.27",
         "pluralize": "^4.0.0",
         "rxjs": "^5.0.1",
+        "typescript": "2.2.1",
         "zone.js": "^0.8.4"
-    }
+    },
+    "keywords": [
+        "angular",
+        "miter",
+        "miter-framework"
+    ],
+    "contributors": [
+        "Brandon Slade <brandonyoyoslade@gmail.com>"
+    ],
+    "license": "ISC",
+    "private": false,
+    "repository": {
+        "type": "git",
+        "url": "git+ssh://git@github.com/miter-framework/miter-shared-module.git"
+    },
+    "bugs": {
+        "url": "https://github.com/miter-framework/miter-shared-module/issues"
+    },
+    "homepage": "https://github.com/miter-framework/miter-shared-module#readme"
 }
