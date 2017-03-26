@@ -25,6 +25,22 @@ export abstract class CrudService<T> {
         }
     }
     
+    protected transformRoute(url: string, otherParams: { [key: string]: any }): string {
+        let keys = Object.keys(otherParams);
+        for (let q = 0; q < keys.length; q++) {
+            let key = keys[q];
+            const regex = new RegExp(`:${key}`)
+            let matches = url.match(regex);
+            if (matches != null && matches.length) {
+                let val = otherParams[key];
+                if (val.id) val = val.id;
+                delete otherParams[key];
+                url = url.replace(regex, `${val}`);
+            }
+        }
+        return url;
+    }
+    
     abstract get basePath(): string;
     
     protected get http() {
@@ -32,12 +48,13 @@ export abstract class CrudService<T> {
     }
     
     create(data: any, otherParams: { [key: string]: any } = {}): Observable<T> {
+        let url = this.transformRoute(`${this.basePath}${this.pluralPath}/create`, otherParams);
         let params = new URLSearchParams();
         for (let key in otherParams) {
             let value = otherParams[key];
             params.set(key, typeof value === 'string' ? value : JSON.stringify(value));
         }
-        return this.http.post(`${this.basePath}${this.pluralPath}/create`, data, { search: params })
+        return this.http.post(url, data, { search: params })
           .map(response => {
               let result = this.fromJson(response.json());
               if (!result) throw new Error(`Failed to deserialize ${this.modelName} after creating it.`);
@@ -47,6 +64,7 @@ export abstract class CrudService<T> {
     }
     
     find(query: Object, page: number = 0, perPage: number = DEFAULT_PER_PAGE, otherParams: { [key: string]: any } = {}): Observable<SearchResults<T>> {
+        let url = this.transformRoute(`${this.basePath}${this.pluralPath}/find`, otherParams);
         let params = new URLSearchParams();
         query = cloneDeep(query);
         delete (<any>query)['requestingUser'];
@@ -57,23 +75,25 @@ export abstract class CrudService<T> {
             let value = otherParams[key];
             params.set(key, typeof value === 'string' ? value : JSON.stringify(value));
         }
-        return this.http.get(`${this.basePath}${this.pluralPath}/find`, { search: params })
+        return this.http.get(url, { search: params })
           .map(response => SearchResults.fromJson(response.json(), this.fromJson, query))
           .share();
     }
     
     get(id: number, otherParams: { [key: string]: any } = {}): Observable<T | null> {
+        let url = this.transformRoute(`${this.basePath}${this.singularPath}/${id}`, otherParams);
         let params = new URLSearchParams();
         for (let key in otherParams) {
             let value = otherParams[key];
             params.set(key, typeof value === 'string' ? value : JSON.stringify(value));
         }
-        return this.http.get(`${this.basePath}${this.singularPath}/${id}`, { search: params })
+        return this.http.get(url, { search: params })
           .map(response => this.fromJson(response.json()))
           .share();
     }
 
     count(query: Object, otherParams: { [key: string]: any } = {}): Observable<number> {
+        let url = this.transformRoute(`${this.basePath}${this.pluralPath}/count`, otherParams);
         let params = new URLSearchParams();
         query = cloneDeep(query);
         delete (<any>query)['requestingUser'];
@@ -82,15 +102,20 @@ export abstract class CrudService<T> {
             let value = otherParams[key];
             params.set(key, typeof value === 'string' ? value : JSON.stringify(value));
         }
-        return this.http.get(`${this.basePath}${this.pluralPath}/count`, { search: params })
+        return this.http.get(url, { search: params })
           .map(response => parseInt(response.text()))
           .share();
     }
     
-    update(id: number, data: any, returning: boolean = false): Observable<T> {
+    update(id: number, data: any, returning: boolean = false, otherParams: { [key: string]: any } = {}): Observable<T> {
+        let url = this.transformRoute(`${this.basePath}${this.pluralPath}/${id}`, otherParams);
         let params = new URLSearchParams();
         params.set('returning', `${!!returning}`);
-        return this.http.put(`${this.basePath}${this.singularPath}/${id}`, data, { search: params })
+        for (let key in otherParams) {
+            let value = otherParams[key];
+            params.set(key, typeof value === 'string' ? value : JSON.stringify(value));
+        }
+        return this.http.put(url, data, { search: params })
           .map(response => {
               if (returning) {
                   let result = this.fromJson(response.json());
@@ -103,8 +128,14 @@ export abstract class CrudService<T> {
           .share();
     }
     
-    destroy(id: number): Observable<boolean> {
-        return this.http.delete(`${this.basePath}${this.singularPath}/${id}`)
+    destroy(id: number, otherParams: { [key: string]: any } = {}): Observable<boolean> {
+        let url = this.transformRoute(`${this.basePath}${this.singularPath}/destroy`, otherParams);
+        let params = new URLSearchParams();
+        for (let key in otherParams) {
+            let value = otherParams[key];
+            params.set(key, typeof value === 'string' ? value : JSON.stringify(value));
+        }
+        return this.http.delete(url, { search: params })
           .map(response => response.json().destroyed)
           .share();
     }
