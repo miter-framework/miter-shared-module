@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Http, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/share';
+import 'rxjs/add/operator/catch';
 import cloneDeep = require('lodash.clonedeep');
 
 import { DEFAULT_PER_PAGE, SearchResults } from '../util/search-results';
+import { HTTP_STATUS_OK } from '../util/http-status-type';
 import { pluralize } from '../util/pluralize';
 
 export type FromJsonFn<T> = { (json: any): T | null };
@@ -108,7 +111,7 @@ export abstract class CrudService<T> {
     }
     
     update(id: number, data: any, returning: boolean = false, otherParams: { [key: string]: any } = {}): Observable<T> {
-        let url = this.transformRoute(`${this.basePath}${this.pluralPath}/${id}`, otherParams);
+        let url = this.transformRoute(`${this.basePath}${this.singularPath}/${id}`, otherParams);
         let params = new URLSearchParams();
         params.set('returning', `${!!returning}`);
         for (let key in otherParams) {
@@ -129,14 +132,15 @@ export abstract class CrudService<T> {
     }
     
     destroy(id: number, otherParams: { [key: string]: any } = {}): Observable<boolean> {
-        let url = this.transformRoute(`${this.basePath}${this.singularPath}/destroy`, otherParams);
+        let url = this.transformRoute(`${this.basePath}${this.singularPath}/${id}`, otherParams);
         let params = new URLSearchParams();
         for (let key in otherParams) {
             let value = otherParams[key];
             params.set(key, typeof value === 'string' ? value : JSON.stringify(value));
         }
         return this.http.delete(url, { search: params })
-          .map(response => response.json().destroyed)
+          .map(response => response.status === HTTP_STATUS_OK)
+          .catch(err => Observable.of(false))
           .share();
     }
     
