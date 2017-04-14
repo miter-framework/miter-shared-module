@@ -1,6 +1,6 @@
 {
     "name": "miter-shared-module",
-    "version": "0.1.3",
+    "version": "0.1.5",
     "description": "An Angular module containing helpful classes that facilitate working with a miter backend",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
