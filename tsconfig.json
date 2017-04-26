@@ -19,6 +19,7 @@
         "declaration": true,
         "types": [
             "lodash.clonedeep",
+            "lodash.merge",
             "node",
             "pluralize"
         ]
