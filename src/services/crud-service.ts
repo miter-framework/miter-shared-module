@@ -144,9 +144,13 @@ export abstract class CrudService<T> {
         return url;
     }
     protected serializeValue(value: any) {
-        return !value || typeof value === 'string' ? value :
-          value.id && typeof value.id === 'number' ? value.id :
-                                                     JSON.stringify(value);
+        let isSerialized = !value || typeof value === 'string' || typeof value === 'number';
+        if (isSerialized) return value;
+        
+        let isModel = value.id && typeof value.id === 'number';
+        if (isModel) return value.id;
+        
+        return JSON.stringify(value);
     }
     
     protected transformQuery(oldQuery: any): string {
