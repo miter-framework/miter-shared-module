@@ -159,7 +159,7 @@ export abstract class CrudService<T> {
         for (let key of keys) {
             let value = query[key];
             let serializedValue = this.serializeValue(value, false);
-            if (serializedValue === null || typeof serializedValue === 'undefined') delete query[key];
+            if (serializedValue === null || typeof serializedValue === 'undefined' || key === 'requestingUser') delete query[key];
             else query[key] = serializedValue;
         }
         return JSON.stringify(query);
