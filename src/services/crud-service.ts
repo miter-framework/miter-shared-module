@@ -122,7 +122,7 @@ export abstract class CrudService<T> {
         let params = new URLSearchParams();
         for (let key in origParams) {
             let value = origParams[key];
-            let serializedValue = this.serializeValue(value);
+            let serializedValue = this.serializeValue(value, true);
             if (serializedValue === null || typeof serializedValue === 'undefined') continue;
             params.set(key, serializedValue);
         }
@@ -143,14 +143,14 @@ export abstract class CrudService<T> {
         }
         return url;
     }
-    protected serializeValue(value: any) {
+    protected serializeValue(value: any, stringify: boolean = false) {
         let isSerialized = !value || typeof value === 'string' || typeof value === 'number';
         if (isSerialized) return value;
         
         let isModel = value.id && typeof value.id === 'number';
         if (isModel) return value.id;
         
-        return JSON.stringify(value);
+        return stringify ? JSON.stringify(value) : value;
     }
     
     protected transformQuery(oldQuery: any): string {
@@ -158,7 +158,7 @@ export abstract class CrudService<T> {
         let keys = Object.keys(query);
         for (let key of keys) {
             let value = query[key];
-            let serializedValue = this.serializeValue(value);
+            let serializedValue = this.serializeValue(value, false);
             if (serializedValue === null || typeof serializedValue === 'undefined') delete query[key];
             else query[key] = serializedValue;
         }
