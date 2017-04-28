@@ -18,7 +18,8 @@
     "typings": "./dist/index",
     "devDependencies": {
         "pre-commit": "^1.2.2",
-        "tslint": "^4.5.1"
+        "tslint": "^4.5.1",
+        "typescript": "2.3.0"
     },
     "dependencies": {
         "@angular/common": "4.0.0",
@@ -35,7 +36,6 @@
         "lodash.merge": "^4.6.0",
         "pluralize": "^4.0.0",
         "rxjs": "^5.0.1",
-        "typescript": "2.2.1",
         "zone.js": "^0.8.4"
     },
     "keywords": [
