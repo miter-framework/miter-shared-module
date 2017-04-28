@@ -1,9 +1,8 @@
 {
     "name": "miter-shared-module",
-    "version": "0.1.5",
+    "version": "0.1.7",
     "description": "An Angular module containing helpful classes that facilitate working with a miter backend",
     "scripts": {
-        "install": "yarn build",
         "test": "echo \"Error: no test specified\" && exit 1",
         "build": "rm -rf ./dist && tsc",
         "watch": "tsc -w",
