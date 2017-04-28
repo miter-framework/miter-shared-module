@@ -3,8 +3,9 @@
     "version": "0.1.5",
     "description": "An Angular module containing helpful classes that facilitate working with a miter backend",
     "scripts": {
+        "install": "yarn build",
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "tsc",
+        "build": "rm -rf ./dist && tsc",
         "watch": "tsc -w",
         "prepublish": "rm -rf ./dist && tsc",
         "lint": "./node_modules/.bin/tslint -c \"config/tslint.json\" --project \"tsconfig.json\" -e \"**/*.spec.ts\" -t stylish",
