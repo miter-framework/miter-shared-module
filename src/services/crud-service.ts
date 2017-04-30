@@ -4,11 +4,12 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import merge = require('lodash.merge');
-import { cache } from '../util/cache';
 
-import { DEFAULT_PER_PAGE, SearchResults } from '../util/search-results';
+import { cache } from '../util/cache';
 import { HTTP_STATUS_OK } from '../util/http-status-type';
 import { pluralize } from '../util/pluralize';
+import { Result } from '../util/result';
+import { DEFAULT_PER_PAGE, SearchResults } from '../util/search-results';
 
 export type FromJsonFn<T> = { (json: any): T | null };
 
@@ -51,13 +52,13 @@ export abstract class CrudService<T> {
         return results;
     }
     
-    create(data: any, otherParams: { [key: string]: any } = {}): Observable<T> {
+    create(data: any, otherParams: { [key: string]: any } = {}): Observable<Result<T>> {
         let params = merge({}, otherParams);
         return cache(this.performPost(`${this.basePath}${this.pluralPath}/create`, data, params)
           .map(response => {
               let result = this.fromJson(response.json());
               if (!result) throw new Error(`Failed to deserialize ${this.modelName} after creating it.`);
-              return result;
+              return { result: result };
           }));
     }
     
@@ -66,15 +67,15 @@ export abstract class CrudService<T> {
         return cache(this.performGet(`${this.basePath}${this.pluralPath}/find`, params)
           .map(response => SearchResults.fromJson(response.json(), this.fromJson, query)));
     }
-    findOne(query: Object, otherParams: { [key: string]: any } = {}): Observable<T | null> {
+    findOne(query: Object, otherParams: { [key: string]: any } = {}): Observable<Result<T>> {
         let params = merge({}, otherParams, { query: this.transformQuery(query) });
         return cache(this.performGet(`${this.basePath}${this.pluralPath}/find-one`, params)
-          .map(response => this.fromJson(response.json())));
+          .map(response => ({ result: this.fromJson(response.json()) })));
     }
-    get(id: number, otherParams: { [key: string]: any } = {}): Observable<T | null> {
+    get(id: number, otherParams: { [key: string]: any } = {}): Observable<Result<T>> {
         let params = merge({}, otherParams, { id: id });
         return cache(this.performGet(`${this.basePath}${this.singularPath}/:id`, params)
-          .map(response => this.fromJson(response.json())));
+          .map(response => ({ result: this.fromJson(response.json()) })));
     }
     count(query: Object, otherParams: { [key: string]: any } = {}): Observable<number> {
         let params = merge({}, otherParams, { query: this.transformQuery(query) });
@@ -82,14 +83,14 @@ export abstract class CrudService<T> {
           .map(response => parseInt(response.text())));
     }
     
-    update(id: number, data: any, returning: boolean = false, otherParams: { [key: string]: any } = {}): Observable<T> {
+    update(id: number, data: any, returning: boolean = false, otherParams: { [key: string]: any } = {}): Observable<Result<T>> {
         let params = merge({}, otherParams, { id: id, returning: !!returning });
         return cache(this.performPut(`${this.basePath}${this.pluralPath}/:id`, data, params)
           .map(response => {
               if (!returning) return null;
               let result = this.fromJson(response.json());
               if (!result) throw new Error(`Failed to deserialize ${this.modelName} after updating it`);
-              return result;
+              return { result: result };
           }));
     }
     
