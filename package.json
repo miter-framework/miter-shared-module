@@ -22,12 +22,12 @@
         "typescript": "2.3.0"
     },
     "dependencies": {
-        "@angular/common": "4.0.0",
-        "@angular/core": "4.0.0",
-        "@angular/forms": "4.0.0",
-        "@angular/http": "4.0.0",
-        "@angular/platform-browser": "4.0.0",
-        "@angular/router": "4.0.0",
+        "@angular/common": "4.1.0",
+        "@angular/core": "4.1.0",
+        "@angular/forms": "4.1.0",
+        "@angular/http": "4.1.0",
+        "@angular/platform-browser": "4.1.0",
+        "@angular/router": "4.1.0",
         "@types/lodash.clonedeep": "^4.5.2",
         "@types/lodash.merge": "^4.6.2",
         "@types/node": "^7.0.10",
