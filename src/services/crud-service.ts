@@ -85,7 +85,7 @@ export abstract class CrudService<T> {
     
     update(id: number, data: any, returning: boolean = false, otherParams: { [key: string]: any } = {}): Observable<Result<T>> {
         let params = merge({}, otherParams, { id: id, returning: !!returning });
-        return cache(this.performPut(`${this.basePath}${this.pluralPath}/:id`, data, params)
+        return cache(this.performPut(`${this.basePath}${this.singularPath}/:id`, data, params)
           .map(response => {
               if (!returning) return null;
               let result = this.fromJson(response.json());
