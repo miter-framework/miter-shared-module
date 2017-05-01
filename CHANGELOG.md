@@ -1,8 +1,15 @@
 
 <a name="0.2.0"></a>
-## [0.2.0](https://github.com/miter-framework/miter/compare/0.1.7...HEAD) (_Future_)
+## [0.2.0](https://github.com/miter-framework/miter/compare/0.1.8...HEAD) (_Future_)
 
 * Lots of cool things planned!
+
+
+
+<a name="0.1.8"></a>
+## [0.1.8](https://github.com/miter-framework/miter/compare/0.1.7...0.1.8) (_Future_)
+
+* **crud-service:** make get, findOne, create, and update return Result<T> instead of T | null
 
 
 
