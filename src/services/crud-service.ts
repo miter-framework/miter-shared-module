@@ -9,7 +9,6 @@ import merge = require('lodash.merge');
 import { cache } from '../util/cache';
 import { HTTP_STATUS_OK } from '../util/http-status-type';
 import { pluralize } from '../util/pluralize';
-import { Result } from '../util/result';
 import { DEFAULT_PER_PAGE, SearchResults } from '../util/search-results';
 
 export type FromJsonFn<T> = { (json: any): T | null };
