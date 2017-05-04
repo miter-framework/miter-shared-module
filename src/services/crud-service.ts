@@ -3,8 +3,9 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/startWith';
+import 'rxjs/add/operator/toPromise';
 import merge = require('lodash.merge');
-
 import { cache } from '../util/cache';
 import { HTTP_STATUS_OK } from '../util/http-status-type';
 import { pluralize } from '../util/pluralize';
@@ -52,53 +53,60 @@ export abstract class CrudService<T> {
         return results;
     }
     
-    create(data: any, otherParams: { [key: string]: any } = {}): Observable<Result<T>> {
+    create(data: any, otherParams: { [key: string]: any } = {}): Promise<T> {
         let params = merge({}, otherParams);
-        return cache(this.performPost(`${this.basePath}${this.pluralPath}/create`, data, params)
+        return this.performPost(`${this.basePath}${this.pluralPath}/create`, data, params)
           .map(response => {
               let result = this.fromJson(response.json());
               if (!result) throw new Error(`Failed to deserialize ${this.modelName} after creating it.`);
-              return { result: result };
-          }));
+              return result;
+          })
+          .toPromise();
     }
     
-    find(query: Object, page: number = 0, perPage: number = DEFAULT_PER_PAGE, otherParams: { [key: string]: any } = {}): Observable<SearchResults<T>> {
+    find(query: Object, page: number = 0, perPage: number = DEFAULT_PER_PAGE, otherParams: { [key: string]: any } = {}): Promise<SearchResults<T>> {
         let params = merge({}, otherParams, { query: this.transformQuery(query), page: page, perPage: perPage });
-        return cache(this.performGet(`${this.basePath}${this.pluralPath}/find`, params)
-          .map(response => SearchResults.fromJson(response.json(), this.fromJson, query)));
+        return this.performGet(`${this.basePath}${this.pluralPath}/find`, params)
+          .map(response => SearchResults.fromJson(response.json(), this.fromJson, query))
+          .toPromise();
     }
-    findOne(query: Object, otherParams: { [key: string]: any } = {}): Observable<Result<T>> {
+    findOne(query: Object, otherParams: { [key: string]: any } = {}): Promise<T | null> {
         let params = merge({}, otherParams, { query: this.transformQuery(query) });
-        return cache(this.performGet(`${this.basePath}${this.pluralPath}/find-one`, params)
-          .map(response => ({ result: this.fromJson(response.json()) })));
+        return this.performGet(`${this.basePath}${this.pluralPath}/find-one`, params)
+          .map(response => this.fromJson(response.json()))
+          .toPromise();
     }
-    get(id: number, otherParams: { [key: string]: any } = {}): Observable<Result<T>> {
+    get(id: number, otherParams: { [key: string]: any } = {}): Promise<T | null> {
         let params = merge({}, otherParams, { id: id });
-        return cache(this.performGet(`${this.basePath}${this.singularPath}/:id`, params)
-          .map(response => ({ result: this.fromJson(response.json()) })));
+        return this.performGet(`${this.basePath}${this.singularPath}/:id`, params)
+          .map(response => this.fromJson(response.json()))
+          .toPromise();
     }
-    count(query: Object, otherParams: { [key: string]: any } = {}): Observable<number> {
+    count(query: Object, otherParams: { [key: string]: any } = {}): Promise<number> {
         let params = merge({}, otherParams, { query: this.transformQuery(query) });
-        return cache(this.performGet(`${this.basePath}${this.pluralPath}/count`, params)
-          .map(response => parseInt(response.text())));
+        return this.performGet(`${this.basePath}${this.pluralPath}/count`, params)
+          .map(response => parseInt(response.text()))
+          .toPromise();
     }
     
-    update(id: number, data: any, returning: boolean = false, otherParams: { [key: string]: any } = {}): Observable<Result<T>> {
+    update(id: number, data: any, returning: boolean = false, otherParams: { [key: string]: any } = {}): Promise<T> {
         let params = merge({}, otherParams, { id: id, returning: !!returning });
-        return cache(this.performPut(`${this.basePath}${this.singularPath}/:id`, data, params)
+        return this.performPut(`${this.basePath}${this.singularPath}/:id`, data, params)
           .map(response => {
               if (!returning) return null;
               let result = this.fromJson(response.json());
               if (!result) throw new Error(`Failed to deserialize ${this.modelName} after updating it`);
-              return { result: result };
-          }));
+              return result;
+          })
+          .toPromise();
     }
     
-    destroy(id: number, otherParams: { [key: string]: any } = {}): Observable<boolean> {
+    destroy(id: number, otherParams: { [key: string]: any } = {}): Promise<boolean> {
         let params = merge({}, otherParams, { id: id });
-        return cache(this.performDelete(`${this.basePath}${this.singularPath}/:id`, params)
+        return this.performDelete(`${this.basePath}${this.singularPath}/:id`, params)
           .map(response => response.status === HTTP_STATUS_OK)
-          .catch(err => Observable.of(false)));
+          .catch(err => Observable.of(false))
+          .toPromise();
     }
     
     protected performPost(origUrl: string, data: any, origParams: { [key: string]: any } = {}): Observable<Response> {
