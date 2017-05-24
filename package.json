@@ -8,16 +8,11 @@
         "build": "rm -rf ./dist && tsc",
         "watch": "tsc -w",
         "prepublish": "rm -rf ./dist && tsc",
-        "lint": "./node_modules/.bin/tslint -c \"config/tslint.json\" --project \"tsconfig.json\" -e \"**/*.spec.ts\" -t stylish",
-        "pre-commit": "bash ./scripts/pre-commit.sh"
+        "lint": "./node_modules/.bin/tslint -c \"config/tslint.json\" --project \"tsconfig.json\" -e \"**/*.spec.ts\" -t stylish"
     },
-    "pre-commit": [
-        "pre-commit"
-    ],
     "main": "./dist/index.js",
     "typings": "./dist/index",
     "devDependencies": {
-        "pre-commit": "^1.2.2",
         "tslint": "^4.5.1",
         "typescript": "2.3.0"
     },
