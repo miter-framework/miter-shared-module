@@ -158,7 +158,7 @@ export abstract class CrudService<T> {
         }
         return url;
     }
-    protected serializeValue(value: any, stringify: boolean = false) {
+    protected serializeValue(value: any, stringify: boolean = false, allowObject: boolean = false) {
         let isSerialized = !value || typeof value === 'string' || typeof value === 'number';
         if (isSerialized) return value;
         
@@ -166,7 +166,9 @@ export abstract class CrudService<T> {
         if (isModel) return value.id;
         
         if (stringify) return JSON.stringify(value);
-        else if (typeof value === 'object') throw new Error(`Tried to stringify raw object literal with stringify=false. value: ${inspect(value)}`);
+        else if (typeof value === 'object' && (!allowObject || !Array.isArray(value))) {
+            throw new Error(`Tried to stringify raw object literal with stringify=false and allowObject=false. value: ${inspect(value)}`);
+        }
         return value;
     }
     
@@ -175,7 +177,7 @@ export abstract class CrudService<T> {
         let keys = Object.keys(query);
         for (let key of keys) {
             let value = query[key];
-            let serializedValue = this.serializeValue(value, false);
+            let serializedValue = this.serializeValue(value, false, true);
             if (serializedValue === null || typeof serializedValue === 'undefined' || key === 'requestingUser') delete query[key];
             else query[key] = serializedValue;
         }
