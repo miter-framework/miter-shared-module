@@ -10,6 +10,7 @@ import { cache } from '../util/cache';
 import { HTTP_STATUS_OK } from '../util/http-status-type';
 import { pluralize } from '../util/pluralize';
 import { DEFAULT_PER_PAGE, SearchResults } from '../util/search-results';
+import inspect = require('@aboveyou00/util-inspect');
 
 export type FromJsonFn<T> = { (json: any): T | null };
 
@@ -144,9 +145,15 @@ export abstract class CrudService<T> {
             const regex = new RegExp(`:${key}`)
             let matches = url.match(regex);
             if (matches != null && matches.length) {
-                let val = otherParams[key];
-                delete otherParams[key];
-                url = url.replace(regex, `${this.serializeValue(val)}`);
+                try {
+                    let val = otherParams[key];
+                    delete otherParams[key];
+                    url = url.replace(regex, `${this.serializeValue(val)}`);
+                }
+                catch (e) {
+                    console.error(`The following error occurred while serializing the url: "${url}". Specific key: "${key}"`);
+                    throw e;
+                }
             }
         }
         return url;
@@ -158,7 +165,9 @@ export abstract class CrudService<T> {
         let isModel = value.id && typeof value.id === 'number';
         if (isModel) return value.id;
         
-        return stringify ? JSON.stringify(value) : value;
+        if (stringify) return JSON.stringify(value);
+        else if (typeof value === 'object') throw new Error(`Tried to stringify raw object literal with stringify=false. value: ${inspect(value)}`);
+        return value;
     }
     
     protected transformQuery(oldQuery: any): string {
