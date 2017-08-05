@@ -89,11 +89,19 @@ export abstract class CrudService<T> {
           .toPromise();
     }
     
-    update(id: number, data: any, returning: boolean = false, otherParams: { [key: string]: any } = {}): Promise<T> {
+    update(id: number, data: any, otherParams?: { [key: string]: any }): Promise<void>;
+    update(id: number, data: any, returning: false, otherParams?: { [key: string]: any }): Promise<void>;
+    update(id: number, data: any, returning: true, otherParams?: { [key: string]: any }): Promise<T>;
+    update(id: number, data: any, returning: boolean, otherParams?: { [key: string]: any }): Promise<T | void>;
+    update(id: number, data: any, returning: boolean | { [key: string]: any } = false, otherParams: { [key: string]: any } = {}): Promise<T | void> {
+        if (typeof returning === 'object') {
+            otherParams = returning;
+            returning = false;
+        }
         let params = merge({}, otherParams, { id: id, returning: !!returning });
         return this.performPut(`${this.basePath}${this.singularPath}/:id`, data, params)
           .map(response => {
-              if (!returning) return null;
+              if (!returning) return void(0);
               let result = this.fromJson(response.json());
               if (!result) throw new Error(`Failed to deserialize ${this.modelName} after updating it`);
               return result;
