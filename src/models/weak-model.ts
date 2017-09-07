@@ -11,6 +11,9 @@ export abstract class WeakModel {
         else {
             this._id = json.id;
             this.deserialize(json);
+            
+            this._createdAt = json.createdAt ? new Date(json.createdAt) : null;
+            this._updatedAt = json.updatedAt ? new Date(json.updatedAt) : null;
         }
     }
     
@@ -30,6 +33,16 @@ export abstract class WeakModel {
         return !this._weakRef;
     }
     
+    private _createdAt: Date | null;
+    private _updatedAt: Date | null;
+    
+    get createdAt(): Date | null {
+        return this._createdAt;
+    }
+    get updatedAt(): Date | null {
+        return this._updatedAt;
+    }
+    
     toJson(): any {
         return this.toJSON();
     }
@@ -39,6 +52,8 @@ export abstract class WeakModel {
         let obj: any = {};
         obj.id = this._id;
         this.serialize(obj);
+        //Note: deliberately not allowing the user to modify createdAt or updatedAt.
+        //That should be handled on the server
         return obj;
     }
 }
