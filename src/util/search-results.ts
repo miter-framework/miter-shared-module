@@ -35,4 +35,7 @@ export class SearchResults<T> {
         
         return new SearchResults<T>(results, query, page, perPage, total);
     }
+    static empty<T>(query: Object): SearchResults<T> {
+        return new SearchResults<T>([], query, 0, 0, 0);
+    }
 }

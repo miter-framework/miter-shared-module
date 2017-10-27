@@ -1,13 +1,17 @@
 
-<a name="0.2.0"></a>
-## [0.2.0](https://github.com/miter-framework/miter/compare/0.1.8...HEAD) (_Future_)
+<a name="0.5.0"></a>
+## [0.5.0](https://github.com/miter-framework/miter/compare/0.1.8...HEAD) (_Future_)
 
-* Lots of cool things planned!
+### Features
+
+* **search-results:** add .empty helper method to return an empty SearchResults object
 
 
 
 <a name="0.1.8"></a>
 ## [0.1.8](https://github.com/miter-framework/miter/compare/0.1.7...0.1.8) (_Future_)
+
+### Features
 
 * **crud-service:** make get, findOne, create, and update return Result<T> instead of T | null
 
