@@ -1,6 +1,15 @@
 
+<a name="0.5.1"></a>
+## [0.5.1](https://github.com/miter-framework/miter/compare/0.5.0...0.5.1) (2017-10-28)
+
+### Features
+
+* **search-results:** add .error helper method to return an error SearchResults object
+
+
+
 <a name="0.5.0"></a>
-## [0.5.0](https://github.com/miter-framework/miter/compare/0.1.8...HEAD) (_Future_)
+## [0.5.0](https://github.com/miter-framework/miter/compare/0.1.8...0.5.0) (2017-10-27)
 
 ### Features
 
@@ -9,7 +18,7 @@
 
 
 <a name="0.1.8"></a>
-## [0.1.8](https://github.com/miter-framework/miter/compare/0.1.7...0.1.8) (_Future_)
+## [0.1.8](https://github.com/miter-framework/miter/compare/0.1.7...0.1.8) (_A While Ago_)
 
 ### Features
 

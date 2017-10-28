@@ -1,6 +1,6 @@
 {
     "name": "miter-shared-module",
-    "version": "0.1.9",
+    "version": "0.5.1",
     "description": "An Angular module containing helpful classes that facilitate working with a miter backend",
     "scripts": {
         "test": "bash ./scripts/test.sh",

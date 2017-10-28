@@ -3,7 +3,7 @@
 export const DEFAULT_PER_PAGE = 10;
 
 export class SearchResults<T> {
-    constructor(public results: T[], private _query: Object, public page: number = 0, public perPage: number = 0, public total: number = 0) {
+    constructor(public results: T[], private _query: Object, public page: number = 0, public perPage: number = 0, public total: number = 0, public readonly error: any = null) {
         if (this.total == 0) this.total = this.count;
         if (!this.perPage || this.perPage < 0) this.perPage = Math.max(DEFAULT_PER_PAGE, this.count);
     }
@@ -37,5 +37,8 @@ export class SearchResults<T> {
     }
     static empty<T>(query: Object): SearchResults<T> {
         return new SearchResults<T>([], query, 0, 0, 0);
+    }
+    static error<T>(query: Object, error: any): SearchResults<T> {
+        return new SearchResults<T>([], query, 0, 0, 0, error);
     }
 }
