@@ -1,4 +1,18 @@
 
+<a name="0.6.0"></a>
+## [0.5.2](https://github.com/miter-framework/miter/compare/0.5.1...0.5.2) (2017-11-15)
+
+### Breaking Changes
+
+* **angular:** remove dependence on @angular and zone.js completely.
+  - Remove modules.
+  - Remove pluralize pipe.
+  - Remove @angular@* and zone.js peer dependencies.
+  - *Note:* this module still depends on rxjs. In order to avoid importing it twice, it is
+    listed as a peer dependency in the package.json.
+
+
+
 <a name="0.5.1"></a>
 ## [0.5.1](https://github.com/miter-framework/miter/compare/0.5.0...0.5.1) (2017-10-28)
 

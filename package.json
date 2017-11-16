@@ -13,25 +13,13 @@
     "main": "./dist/index.js",
     "typings": "./dist/index",
     "devDependencies": {
-        "@angular/common": "^5.0.0",
-        "@angular/core": "^5.0.0",
-        "@angular/forms": "^5.0.0",
-        "@angular/http": "^5.0.0",
-        "@angular/platform-browser": "^5.0.0",
-        "@angular/router": "^5.0.0",
         "rxjs": "^5.5.0",
         "tslint": "^4.5.1",
-        "zone.js": "^0.8.4"
+        "typescript": "^2.6.1"
     },
     "peerDependencies": {
-        "@angular/common": "^5.0.0",
-        "@angular/core": "^5.0.0",
-        "@angular/forms": "^5.0.0",
-        "@angular/http": "^5.0.0",
-        "@angular/platform-browser": "^5.0.0",
-        "@angular/router": "^5.0.0",
         "rxjs": "^5.5.0",
-        "zone.js": "^0.8.4"
+        "typescript": "^2.6.1"
     },
     "dependencies": {
         "@aboveyou00/util-inspect": "^0.1.8",
@@ -41,8 +29,7 @@
         "@types/pluralize": "^0.0.27",
         "lodash.clonedeep": "^4.5.0",
         "lodash.merge": "^4.6.0",
-        "pluralize": "^4.0.0",
-        "typescript": "2.3.4"
+        "pluralize": "^4.0.0"
     },
     "keywords": [
         "angular",
